@@ -18,6 +18,8 @@ public class DemoApplication {
 	}
 
 
+
+	//Adding users and roles into tables
 	@Bean
 	CommandLineRunner run(UserService userService){
 

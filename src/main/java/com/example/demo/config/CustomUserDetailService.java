@@ -10,17 +10,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 
 
+
+
 public class CustomUserDetailService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
 
 
+    //Checks if user exist and sets userdetails if exists
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
 
-        System.out.println(email);
        User user= userRepository.findByEmail(email);
         System.out.println(user.getRole());
 

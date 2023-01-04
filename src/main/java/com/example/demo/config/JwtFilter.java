@@ -34,8 +34,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-         String authHeader=request.getHeader(AUTHORIZATION);
+        //Reading authorization header
+         String authHeader=request.getHeader("Authorization");
         final String jwtToken;
         String email=null;
 
@@ -43,29 +43,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
         System.out.println("From JWT");
 
-//        if(SecurityContextHolder.getContext().getAuthentication()!=null){
-//            System.out.println("No token "+authHeader);
-//
-//
-//            Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
-//            email=authentication.getName();
-//            System.out.println("Request principal"+email);
-//
-//            UserDetails userDetails=userDetailsService.loadUserByUsername(email);
-//            jwtToken=jwtUtils.generateToken(userDetails);
-//
-//            authHeader="Bearer "+jwtToken;
-//            response.setHeader(AUTHORIZATION,authHeader);
-//            System.out.println("Generated From auth=null but authenticated==" + jwtToken);
-//
-//            filterChain.doFilter(request,response);
-//            return;
-//
-//        }
 
-
-
-
+        //If auth header exists:Extract username/email validate user and continue
         if(authHeader!=null && SecurityContextHolder.getContext().getAuthentication()==null) {
             jwtToken=authHeader.substring(7,authHeader.length());
 
@@ -90,7 +69,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
         else{
 
-            System.out.println("outside");
             filterChain.doFilter(request,response);
         }
 

@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 @Configuration
-@EnableWebSecurity(debug=true)
+@EnableWebSecurity
 public class SecurityConfig {
 
 private JwtUtils jwtUtils;
@@ -51,6 +51,7 @@ public UserDetailsService MyUserDetailsService(){
 
 
     //for custom login page after .formlogin() .loginpage("/xyz") .permitAll() .....else endless loop
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
