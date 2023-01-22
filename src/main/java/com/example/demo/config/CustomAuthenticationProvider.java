@@ -8,12 +8,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 
-
+@Autowired
+    PasswordEncoder passwordEncoder;
 
 @Autowired
 UserDetailsService userDetailsService;
@@ -24,14 +27,24 @@ UserDetailsService userDetailsService;
         String username=authentication.getName();
         String password=authentication.getCredentials().toString();
 
-
-        UserDetails userDetails= userDetailsService.loadUserByUsername(username);
-
         System.out.println("From custom auth provider");
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken=new UsernamePasswordAuthenticationToken(userDetails.getUsername(),userDetails.getPassword(), userDetails.getAuthorities());
-        usernamePasswordAuthenticationToken.setDetails(authentication.getDetails());
 
-        return usernamePasswordAuthenticationToken;
+        try {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            if(passwordEncoder.encode(password).equals(userDetails.getPassword())) {
+
+                return new UsernamePasswordAuthenticationToken(username, passwordEncoder.encode(password), userDetails.getAuthorities());
+            }
+            else{
+                throw new UsernameNotFoundException("bad credential");
+            }
+        }
+        catch (Exception e){
+            throw new UsernameNotFoundException("Bad Credential");
+        }
+
+
+
     }
 
     @Override

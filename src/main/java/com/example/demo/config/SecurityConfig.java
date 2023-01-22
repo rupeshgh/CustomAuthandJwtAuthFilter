@@ -1,8 +1,10 @@
 package com.example.demo.config;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,20 +39,19 @@ private JwtUtils jwtUtils;
     }
 
 
+    @Autowired
+    CustomUserDetailService customUserDetailService;
+
 
     public void configure( AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider( customAuthenticationProvider());
     }
 
-@Bean
-public UserDetailsService MyUserDetailsService(){
-
-        return new CustomUserDetailService();
-    }
 
 
 
-    //for custom login page after .formlogin() .loginpage("/xyz") .permitAll() .....else endless loop
+
+    //fformlogin() .loginpage("/xyz") .permitAll() .....else endless loop
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
